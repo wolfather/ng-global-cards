@@ -1,0 +1,76 @@
+<div *ngIf="item$ | async as data;">
+    <h1>Dados do Investimento</h1>
+    <section class="d-flex align-items-start bg-light mb-3">
+        <div class="col">
+            <dl>
+                <dt>Nome</dt>
+                <dd>{{ data.nome }}</dd>
+            </dl>
+        </div>
+        <div class="col">
+            <dl>
+                <dt>Objetivo</dt>
+                <dd>{{ data.objetivo }}</dd>
+            </dl>
+        </div>
+        <div class="col">
+            <dl>
+                <dt>Saldo Total</dt>
+                <dd>{{ data.saldoTotal | currency:'BRL' }}</dd>
+            </dl>
+        </div>
+
+    </section>
+    <section>
+        <h2>Resgate</h2>
+        <form 
+            [disabled]="data.indicadorCarencia === 'S'"
+            (ngSubmit)="submitRescueForm()">
+            <fieldset>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <td>Ação</td>
+                        <td>Saldo Acumulado</td>
+                        <td>Valor a resgatar</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let acao of data?.acoes; let index = index;">
+                        <td>{{ acao.nome }}</td>
+                        <td>{{ acao.percentual | convertpercentagetovalue:data.saldoTotal | currency:'BRL' }}</td>
+                        <td>
+                            <div [ngStyle]="{'border-color': data.saldoTotal < (acao.percentual | convertpercentagetovalue:data.saldoTotal) ? 'red': 'gray'}">
+                                <app-cinput 
+                                    [dataStock]="acao.nome"
+                                    [indicadorCarencia]="data.indicadorCarencia"
+                                    [value]="acao.percentual | convertpercentagetovalue:data.saldoTotal"
+                                    (onChangeInput)="changeInputValue(acao?.percentual, data?.saldoTotal)"
+                                ></app-cinput>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2">
+                                <p class="d-flex justify-content-center">
+                                    Valor total do resgate: <span class="fw-bold">{{ data.saldoTotal | currency:'BRL' }}</span>
+                                </p>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </fieldset>
+            
+            <section>
+                <button class="btn btn-secondary btn-danger">cancelar</button>
+                <button 
+                    class="btn btn-primary btn-success"
+                    [disabled]="data.indicadorCarencia === 'S'"
+                >confirmar resgate</button>
+            </section>
+        </form>
+    </section>
+</div>

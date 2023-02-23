@@ -1,0 +1,25 @@
+<div *ngIf="investments$ | async as data; else loading">
+    <h1 class="cTitle">investimentos</h1>
+  
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <td>Nome</td>
+          <td>Objetivo</td>
+          <td>Saldo Total</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let investment of data; let index = index; trackBy:trackByInvestmentId">
+          <td><a (click)="navigateTo(investment)">{{ investment.nome }}</a></td>
+          <td>{{ investment.objetivo }}</td>
+          <td>{{ investment.saldoTotal | currency:'BRL' }}</td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+<ng-template #loading>
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</ng-template>

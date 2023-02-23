@@ -1,0 +1,11 @@
+<label>
+    <input
+        [disabled]="indicadorCarencia === 'S'"
+        type="text" 
+        [attr.data-stock]="dataStock | joinstring"
+        appInputallownumbers
+        [ngModel]="value | currency:'BRL'"
+        (ngModelChange)="onChangeInput"
+        [ngModelOptions]="{standalone: true}"
+    />
+</label>
